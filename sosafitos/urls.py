@@ -15,7 +15,12 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from sosafitosapp import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('/', views.home, name='home'),
+    path('/register', views.registerReport, name='register'),
+    path('/login', views.login, name='login'),
+    path('/editProfile', views.editProfile, name='edit')
 ]
