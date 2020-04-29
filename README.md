@@ -1,6 +1,11 @@
 # 2020-1-grupo1
 
 ## Para los pull request colocar
+### Nombre de la branch
+feature\feature-name
+
+fix\thing to fix
+
 ### Característica
 Breve descripción de lo que se implementó y cómo se implementó.
 
