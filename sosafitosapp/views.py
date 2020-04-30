@@ -40,7 +40,7 @@ def logout_user(request):
 
 
 def registerReport(request):
-    pass
+    return render(request, 'sosafitosapp/registerReport.html')
 
 @login_required
 def editProfile(request):
