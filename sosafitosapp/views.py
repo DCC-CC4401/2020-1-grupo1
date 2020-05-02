@@ -51,7 +51,11 @@ def editProfile(request):
         return render(request, "sosafitosapp/edit_profile.html")
 
     if request.method == 'POST':
-        pass
+        username = request.POST['username']
+        password = request.POST['password']
+        mail = request.POST['mail']
+        user = User.objects.create_user(username=username, password=password, email=mail)
+        return HttpResponseRedirect('/')
 
 
 def register(request):
