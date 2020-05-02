@@ -3,7 +3,7 @@ from django.contrib import messages
 from .forms import UserRegisterForm
 
 def home(request):
-    return render(request, "sosafitosapp/login.html")
+    return render(request, "sosafitosapp/home.html")
 
 def login(request):
     pass
