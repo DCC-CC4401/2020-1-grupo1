@@ -1,32 +1,9 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <title>Sofafitos</title>
+{% extends "sosafitosapp/base_login_register.html" %}
 
-    <link rel="canonical" href="https://getbootstrap.com/docs/4.4/examples/sign-in/">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-
-    <!-- Bootstrap core CSS -->
-<link href="/docs/4.4/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-
-    <style>
-
-        .contenedor1 {
-
-            position: absolute;
-            width: 350px;
-            height: 150px;
-            left: 40%;
-            top: 30%;
-            }
-
-    </style>
-    <link href="signin.css" rel="stylesheet">
-  </head>
-  <body class="text-center">
-  </body>
-        <form class = "contenedor1" method="post">
-            {% csrf_token %}
+{% block content %}
+<div class="col-4 text-center">
+    <form method="post" class="container">
+        {% csrf_token %}
             <div class="shadow-none p-3 mb-5 bg-light rounded">
 
                 <div class="form-group">
@@ -35,7 +12,11 @@
                 </div>
                 <div class="form-group">
                     <label for="editProfilePassword">Contraseña</label>
-                    <input type="password" class="form-control" id="editProfilePassword" name="password" required>
+                    <input type="password" class="form-control" id="editProfilePassword" name="new password" required>
+                </div>
+                <div class="form-group">
+                    <label for="editProfilePasswordOld">Contraseña Antigua</label>
+                    <input type="password" class="form-control" id="editProfilePasswordOld" name="old password" required>
                 </div>
                 <div class="form-group">
                     <label for="editProfileMail">Correo</label>
@@ -46,6 +27,7 @@
                     <a href="login.html" class="btn btn-primary">Cancelar</a>
                 </div>
             </div>
-        </form>
-</body>
-</html>
+    </form>
+</div>
+
+{% endblock content %}

@@ -1,27 +1,14 @@
-from django.shortcuts import render, redirect
 from django.contrib import messages
-from .forms import UserRegisterForm
 from django.contrib.auth import logout, authenticate, login
-from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import redirect, render
+
+from .forms import UserRegisterForm
 
 
 # Create your views here.
 def home(request):
     return render(request, "sosafitosapp/home.html")
-
-
-def register_user(request):
-    if request.method == 'GET':
-        return render(request, "sosafitosapp/register.html")
-
-    if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
-        mail = request.POST['mail']
-        user = User.objects.create_user(username=username, password=password, email=mail)
-        return HttpResponseRedirect('/')
 
 
 def login_user(request):
@@ -34,7 +21,11 @@ def login_user(request):
         user = authenticate(username=username, password=password)
         if user is not None:
             login(request, user)
-            return HttpResponseRedirect('/')
+            messages.success(request, 'Bienvenido ' + username)
+            return redirect("home")
+        else:
+            messages.warning(request, 'Usuario o contraseña incorrectos')
+            return HttpResponseRedirect('/register/')
 
 
 def logout_user(request):
@@ -51,11 +42,14 @@ def editProfile(request):
         return render(request, "sosafitosapp/edit_profile.html")
 
     if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
-        mail = request.POST['mail']
-        user = User.objects.create_user(username=username, password=password, email=mail)
-        return HttpResponseRedirect('/')
+        if request.user.password == request.POST['old password']:
+            request.user.username = request.POST['username']
+            request.user.password = request.POST['new password']
+            request.user.email = request.POST['mail']
+            messages.success(request, 'Perfil actualizado!')
+            return HttpResponseRedirect('/')
+        else:
+            messages.warning(request, 'Contraseña incorrecta')
 
 
 def register(request):
