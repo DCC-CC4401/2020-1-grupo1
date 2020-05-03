@@ -71,7 +71,7 @@ def editPassword(request):
             form.save()
             update_session_auth_hash(request, form.user)
             messages.success(request, "Contraseña editada exitosamente")
-            return redirect("home")
+            return HttpResponseRedirect("/editProfile")
         else:
             return redirect("sosafitosapp/edit_password")
     else:
