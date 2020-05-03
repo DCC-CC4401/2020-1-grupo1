@@ -10,14 +10,21 @@
     <body>
         <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-light border-bottom shadow-sm">
             <h5 class="my-0 mr-md-auto font-weight-normal">Sosafitos</h5>
+            <div class="col-2 text-center">
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+            </div>
             {% if user.is_authenticated %}
                 <nav class="my-2 my-md-0 mr-md-3">
                     <a class="p-2 text-dark" href="#">Subir reporte</a>
-                    <a class="p-2 text-dark" href="#">Editar perfil</a>
+                    <a class="p-2 text-dark" href="{% url 'edit' %}">Editar perfil</a>
                 </nav>
-                <a class="btn btn-outline-primary" href="#">Cerrar sesion</a>
+                <a class="btn btn-outline-primary" href="{% url 'logout' %}">Cerrar sesion</a>
             {% else %}
-                <a class="btn btn-outline-primary" href="#">Iniciar sesion</a>
+                <a class="btn btn-outline-primary" href="{% url 'login' %}">Iniciar sesion</a>
             {% endif %}
         </div>
 

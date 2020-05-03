@@ -2,8 +2,10 @@ from django.contrib import messages
 from django.contrib.auth import logout, authenticate, login
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, render
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth import update_session_auth_hash
 
-from .forms import UserRegisterForm
+from .forms import UserRegisterForm, EditProfileForm
 
 
 # Create your views here.
@@ -25,7 +27,7 @@ def login_user(request):
             return redirect("home")
         else:
             messages.warning(request, 'Usuario o contraseña incorrectos')
-            return HttpResponseRedirect('/register/')
+            return HttpResponseRedirect('/login')
 
 
 def logout_user(request):
@@ -38,18 +40,15 @@ def registerReport(request):
 
 
 def editProfile(request):
-    if request.method == 'GET':
-        return render(request, "sosafitosapp/edit_profile.html")
-
     if request.method == 'POST':
-        if request.user.password == request.POST['old password']:
-            request.user.username = request.POST['username']
-            request.user.password = request.POST['new password']
-            request.user.email = request.POST['mail']
-            messages.success(request, 'Perfil actualizado!')
-            return HttpResponseRedirect('/')
-        else:
-            messages.warning(request, 'Contraseña incorrecta')
+        form = EditProfileForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Perfil editado exitosamente")
+            return redirect("home")
+    else:
+        form = EditProfileForm(instance=request.user)
+        return render(request, "sosafitosapp/edit_profile.html", {"form":form})
 
 
 def register(request):
@@ -63,3 +62,18 @@ def register(request):
     else:
         form = UserRegisterForm()
     return render(request, "sosafitosapp/user_register.html", {"form":form})
+
+
+def editPassword(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(data=request.POST, user=request.user)
+        if form.is_valid():
+            form.save()
+            update_session_auth_hash(request, form.user)
+            messages.success(request, "Contraseña editada exitosamente")
+            return redirect("home")
+        else:
+            return redirect("sosafitosapp/edit_password")
+    else:
+        form = PasswordChangeForm(user=request.user)
+        return render(request, "sosafitosapp/edit_password.html", {"form":form})
