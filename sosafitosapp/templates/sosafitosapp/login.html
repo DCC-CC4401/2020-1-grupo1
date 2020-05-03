@@ -2,19 +2,20 @@
 
 {% block content %}
 <div class="col-4 text-center">
-    <form class="container">
+    <form method="post" class="container">
+        {% csrf_token %}
         <div class="shadow-none p-3 mb-5 bg-light rounded">
             <div class="form-group">
                 <label for="exampleInputEmail1">Usuario</label>
-                <input type="user" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                <input type="text" class="form-control" id="exampleInputEmail1" name="username">
             </div>
             <div class="form-group">
                 <label for="exampleInputPassword1">Contraseña</label>
-                <input type="password" class="form-control" id="exampleInputPassword1">
+                <input type="password" class="form-control" id="exampleInputPassword1" name="password">
             </div>
             <div>
                 <button type="submit" class="btn btn-primary">Ingresar</button>
-                <button type="register" class="btn btn-primary">Regístrarse</button>
+                <a href="{% url 'registerUser' %}" class="btn btn-primary">Regístrarse</a>
             </div>
             <div>
                 <a href="#" class="text-decoration-none">Olvidé la contraseña</a>
