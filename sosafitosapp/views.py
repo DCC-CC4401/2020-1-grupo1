@@ -73,7 +73,8 @@ def editPassword(request):
             messages.success(request, "Contraseña editada exitosamente")
             return HttpResponseRedirect("/editProfile")
         else:
-            return redirect("sosafitosapp/edit_password")
+            messages.warning(request, "Error en la contraseña")
+            return HttpResponseRedirect("/editPassword")
     else:
         form = PasswordChangeForm(user=request.user)
         return render(request, "sosafitosapp/edit_password.html", {"form":form})
