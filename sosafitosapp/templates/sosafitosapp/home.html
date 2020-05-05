@@ -17,15 +17,11 @@
                     {% endfor %}
                 {% endif %}
             </div>
-            {% if user.is_authenticated %}
                 <nav class="my-2 my-md-0 mr-md-3">
                     <a class="p-2 text-dark" href="#">Subir reporte</a>
                     <a class="p-2 text-dark" href="{% url 'edit' %}">Editar perfil</a>
                 </nav>
                 <a class="btn btn-outline-primary" href="{% url 'logout' %}">Cerrar sesion</a>
-            {% else %}
-                <a class="btn btn-outline-primary" href="{% url 'login' %}">Iniciar sesion</a>
-            {% endif %}
         </div>
 
     </body>

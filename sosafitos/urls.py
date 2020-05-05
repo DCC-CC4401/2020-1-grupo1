@@ -20,7 +20,7 @@ from sosafitosapp import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.home, name='home'),
-    path('register/', views.registerReport, name='register'),
+    path('register/', views.registerReport, name='registerReport'),
     path('login/', views.login_user, name='login'),
     path('editProfile/', views.editProfile, name='edit'),
     path('logout/', views.logout_user, name='logout'),
