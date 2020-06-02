@@ -1,7 +1,7 @@
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
-
+from PIL import Image
 
 # Create your models here.
 class Reporte(models.Model):
@@ -10,3 +10,16 @@ class Reporte(models.Model):
     foto = models.ImageField(upload_to='Reportes')
     fecha = models.DateField(default=timezone.now)
     autor = models.ForeignKey(User, on_delete=models.CASCADE)
+    
+    def __str__(self):
+        return self.titulo
+
+    def save(self):
+        super().save()
+
+        img = Image.open(self.foto.path)
+
+        if img.height>1080 or img.width> 1920:
+            output_size = (1920,1080)
+            img.thumbnail(output_size)
+            img.save(self.image.path)

@@ -6,15 +6,18 @@ from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import user_passes_test
-
-from .forms import UserRegisterForm, EditProfileForm
+from django.views.generic import CreateView
+from .forms import UserRegisterForm, EditProfileForm, UploadReportForm
+from .models import Reporte
 
 def user_is_not_logged_in(user):
     return not user.is_authenticated
 
+
 @login_required
 def home(request):
     return render(request, "sosafitosapp/home.html")
+
 
 @user_passes_test(user_is_not_logged_in, login_url='/')
 def login_user(request):
@@ -33,14 +36,33 @@ def login_user(request):
             messages.warning(request, 'Usuario o contraseña incorrectos')
             return HttpResponseRedirect('/login')
 
+
 @login_required
 def logout_user(request):
     logout(request)
     return HttpResponseRedirect('/login')
 
 
+class ReporteCreateView(CreateView):
+    model = Reporte
+    fields = ['titulo', 'descripcion', 'foto']
+
+@login_required
 def registerReport(request):
-    return render(request, 'sosafitosapp/registerReport.html')
+    if request.method == 'POST':
+        form = UploadReportForm(request.POST, 
+                                request.FILES, 
+                                instance=request.user)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Reporte subido!')
+            return redirect('home')
+    else:
+        form = UploadReportForm()
+
+    context = {'form' : form}
+    return render(request, 'sosafitosapp/registerReport.html', context)
+
 
 @login_required
 def editProfile(request):
@@ -52,7 +74,8 @@ def editProfile(request):
             return redirect("home")
     else:
         form = EditProfileForm(instance=request.user)
-        return render(request, "sosafitosapp/edit_profile.html", {"form":form})
+    return render(request, "sosafitosapp/edit_profile.html", {"form":form})
+
 
 @user_passes_test(user_is_not_logged_in, login_url='/')
 def register(request):
@@ -66,6 +89,7 @@ def register(request):
     else:
         form = UserRegisterForm()
     return render(request, "sosafitosapp/user_register.html", {"form":form})
+
 
 @login_required
 def editPassword(request):
