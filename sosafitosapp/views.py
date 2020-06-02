@@ -6,9 +6,10 @@ from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import user_passes_test
-from django.views.generic import CreateView
-from .forms import UserRegisterForm, EditProfileForm, UploadReportForm
-from .models import Reporte
+from django.views.generic.edit import CreateView
+from django.contrib.auth.mixins import LoginRequiredMixin
+from .forms import UserRegisterForm, EditProfileForm
+from sosafitosapp.models import Reporte
 
 def user_is_not_logged_in(user):
     return not user.is_authenticated
@@ -42,26 +43,12 @@ def logout_user(request):
     logout(request)
     return HttpResponseRedirect('/login')
 
-
-class ReporteCreateView(CreateView):
+class ReporteCreateView(LoginRequiredMixin, CreateView):
     model = Reporte
     fields = ['titulo', 'descripcion', 'foto']
-
-@login_required
-def registerReport(request):
-    if request.method == 'POST':
-        form = UploadReportForm(request.POST, 
-                                request.FILES, 
-                                instance=request.user)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Reporte subido!')
-            return redirect('home')
-    else:
-        form = UploadReportForm()
-
-    context = {'form' : form}
-    return render(request, 'sosafitosapp/registerReport.html', context)
+    def form_valid(self, form):
+        form.instance.autor = self.request.user
+        return super().form_valid(form)
 
 
 @login_required

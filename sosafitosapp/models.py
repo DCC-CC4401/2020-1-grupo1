@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
+from django.urls import reverse
 from PIL import Image
 
 # Create your models here.
@@ -10,10 +11,13 @@ class Reporte(models.Model):
     foto = models.ImageField(upload_to='Reportes')
     fecha = models.DateField(default=timezone.now)
     autor = models.ForeignKey(User, on_delete=models.CASCADE)
-    
+
     def __str__(self):
         return self.titulo
 
+    def get_absolute_url(self):
+        return reverse('home')
+    
     def save(self):
         super().save()
 
