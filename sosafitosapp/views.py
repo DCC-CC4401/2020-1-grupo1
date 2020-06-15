@@ -45,7 +45,7 @@ def logout_user(request):
 
 class ReporteCreateView(LoginRequiredMixin, CreateView):
     model = Reporte
-    fields = ['titulo', 'descripcion', 'foto']
+    fields = ['titulo', 'descripcion', 'foto', 'ciudad', 'ubicacion']
     def form_valid(self, form):
         form.instance.autor = self.request.user
         return super().form_valid(form)
