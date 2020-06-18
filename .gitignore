@@ -130,3 +130,6 @@ dmypy.json
 
 #vscode config
 .vscode/
+
+#media for the project
+media/
