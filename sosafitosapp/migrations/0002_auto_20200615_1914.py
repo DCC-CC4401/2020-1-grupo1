@@ -7,7 +7,7 @@ import location_field.models.plain
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('sosafitosapp', '0001_initial'),
+        ('sosafitosapp', '0002_tag'),
     ]
 
     operations = [
