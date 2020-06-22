@@ -9,12 +9,15 @@ from django.contrib.auth.decorators import user_passes_test
 
 from .forms import UserRegisterForm, EditProfileForm
 
+
 def user_is_not_logged_in(user):
     return not user.is_authenticated
+
 
 @login_required
 def home(request):
     return render(request, "sosafitosapp/home.html")
+
 
 @user_passes_test(user_is_not_logged_in, login_url='/')
 def login_user(request):
@@ -33,6 +36,7 @@ def login_user(request):
             messages.warning(request, 'Usuario o contraseña incorrectos')
             return HttpResponseRedirect('/login')
 
+
 @login_required
 def logout_user(request):
     logout(request)
@@ -42,17 +46,20 @@ def logout_user(request):
 def registerReport(request):
     pass
 
+
 @login_required
 def editProfile(request):
     if request.method == 'POST':
         form = EditProfileForm(request.POST, instance=request.user)
         if form.is_valid():
             form.save()
-            messages.success(request, "Perfil editado exitosamente")
+            if form.has_changed():
+                messages.success(request, "Perfil editado exitosamente")
             return redirect("home")
     else:
         form = EditProfileForm(instance=request.user)
-        return render(request, "sosafitosapp/edit_profile.html", {"form":form})
+        return render(request, "sosafitosapp/edit_profile.html", {"form": form})
+
 
 @user_passes_test(user_is_not_logged_in, login_url='/')
 def register(request):
@@ -65,7 +72,8 @@ def register(request):
             return redirect("home")
     else:
         form = UserRegisterForm()
-    return render(request, "sosafitosapp/user_register.html", {"form":form})
+    return render(request, "sosafitosapp/user_register.html", {"form": form})
+
 
 @login_required
 def editPassword(request):
@@ -81,4 +89,4 @@ def editPassword(request):
             return HttpResponseRedirect("/editPassword")
     else:
         form = PasswordChangeForm(user=request.user)
-        return render(request, "sosafitosapp/edit_password.html", {"form":form})
+        return render(request, "sosafitosapp/edit_password.html", {"form": form})
