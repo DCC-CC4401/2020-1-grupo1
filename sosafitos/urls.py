@@ -16,14 +16,20 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from sosafitosapp import views
+from sosafitosapp.views import ReporteCreateView
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.home, name='home'),
-    path('register/', views.registerReport, name='registerReport'),
+    path('reporte/new/', ReporteCreateView.as_view(), name='reportCreate'),
     path('login/', views.login_user, name='login'),
     path('editProfile/', views.editProfile, name='edit'),
     path('logout/', views.logout_user, name='logout'),
     path('registerUser/', views.register, name='registerUser'),
     path('editPassword/', views.editPassword, name='editPassword')
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

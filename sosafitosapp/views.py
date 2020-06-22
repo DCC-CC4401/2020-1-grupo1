@@ -6,8 +6,10 @@ from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import user_passes_test
-
+from django.views.generic.edit import CreateView
+from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import UserRegisterForm, EditProfileForm
+from sosafitosapp.models import Reporte
 
 
 def user_is_not_logged_in(user):
@@ -42,9 +44,13 @@ def logout_user(request):
     logout(request)
     return HttpResponseRedirect('/login')
 
+class ReporteCreateView(LoginRequiredMixin, CreateView):
+    model = Reporte
+    fields = ['titulo', 'descripcion', 'foto', 'ciudad', 'ubicacion']
+    def form_valid(self, form):
+        form.instance.autor = self.request.user
+        return super().form_valid(form)
 
-def registerReport(request):
-    pass
 
 
 @login_required
@@ -73,6 +79,7 @@ def register(request):
     else:
         form = UserRegisterForm()
     return render(request, "sosafitosapp/user_register.html", {"form": form})
+
 
 
 @login_required
