@@ -14,8 +14,8 @@ class Reporte(models.Model):
     foto = models.ImageField(upload_to='Reportes', default=None)
     fecha = models.DateField(default=timezone.now)
     autor = models.ForeignKey(User, on_delete=models.CASCADE)
-    ciudad = models.CharField(max_length=255, default=None)
-    ubicacion = PlainLocationField(based_fields=['ciudad'], zoom=7, default=None)
+    ciudad = models.CharField(max_length=255)
+    ubicacion = PlainLocationField(based_fields=['ciudad'], zoom=7)
 
     def __str__(self):
         return self.titulo
