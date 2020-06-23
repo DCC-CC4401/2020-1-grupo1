@@ -1,7 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from .models import Reporte
 
 class UserRegisterForm(UserCreationForm):
     email = forms.EmailField(required=True)
@@ -18,11 +17,6 @@ class UserRegisterForm(UserCreationForm):
         #     self.fields['email'].widget.attrs['class'] = 'form-control'
         #     self.fields['password1'].widget.attrs['class'] = 'form-control'
         #     self.fields['password2'].widget.attrs['class'] = 'form-control'
-class ReportCreationForm(forms.ModelForm):
-    
-    class Meta:
-        model = Reporte
-        fields = ['titulo', 'descripcion', 'foto', 'ciudad', 'ubicacion']
         
 class EditProfileForm(forms.ModelForm):
 

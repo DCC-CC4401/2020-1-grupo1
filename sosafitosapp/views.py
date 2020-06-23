@@ -8,7 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import user_passes_test
 from django.views.generic.edit import CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .forms import UserRegisterForm, EditProfileForm, ReportCreationForm
+from .forms import UserRegisterForm, EditProfileForm
 from sosafitosapp.models import Reporte
 
 
@@ -43,22 +43,6 @@ def login_user(request):
 def logout_user(request):
     logout(request)
     return HttpResponseRedirect('/login')
-
-@login_required
-def reportCreate(request):
-    if request.method == 'POST':
-        form = ReportCreationForm(request.POST, request.FILES)
-        form2 = TagCreationForm(request.POST)
-        if form.is_valid() and form2.is_valid():
-            form.instance.autor = request.user
-            form.save()
-            form2.save()
-            messages.success(request, "Reporte subido exitosamente")
-            return redirect("home")
-    else:
-        form = ReportCreationForm()
-        form2 = TagCreationForm()
-    return render(request, "sosafitosapp/reporte_form.html", {"form":form, "form2":form2})
 
 class ReporteCreateView(LoginRequiredMixin, CreateView):
     model = Reporte
