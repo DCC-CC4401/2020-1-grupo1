@@ -18,8 +18,12 @@ class UserRegisterForm(UserCreationForm):
         #     self.fields['email'].widget.attrs['class'] = 'form-control'
         #     self.fields['password1'].widget.attrs['class'] = 'form-control'
         #     self.fields['password2'].widget.attrs['class'] = 'form-control'
-
-
+class ReportCreationForm(forms.ModelForm):
+    
+    class Meta:
+        model = Reporte
+        fields = ['titulo', 'descripcion', 'foto', 'ciudad', 'ubicacion']
+        
 class EditProfileForm(forms.ModelForm):
 
     class Meta:
@@ -37,9 +41,3 @@ class EditProfileForm(forms.ModelForm):
         # This is done here, rather than on the field, because the
         # field does not have access to the initial value
         return self.initial.get('password')
-
-class ReportCreationForm(forms.ModelForm):
-
-    class Meta:
-        model = Reporte
-        fields = ['titulo', 'descripcion', 'foto', 'ciudad', 'ubicacion']

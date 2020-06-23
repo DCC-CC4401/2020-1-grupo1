@@ -48,18 +48,21 @@ def logout_user(request):
 def reportCreate(request):
     if request.method == 'POST':
         form = ReportCreationForm(request.POST, request.FILES)
-        if form.is_valid():
+        form2 = TagCreationForm(request.POST)
+        if form.is_valid() and form2.is_valid():
             form.instance.autor = request.user
             form.save()
+            form2.save()
             messages.success(request, "Reporte subido exitosamente")
             return redirect("home")
     else:
         form = ReportCreationForm()
-    return render(request, "sosafitosapp/reporte_form.html", {"form":form})
+        form2 = TagCreationForm()
+    return render(request, "sosafitosapp/reporte_form.html", {"form":form, "form2":form2})
 
 class ReporteCreateView(LoginRequiredMixin, CreateView):
     model = Reporte
-    fields = ['titulo', 'descripcion', 'foto', 'ciudad', 'ubicacion']
+    fields = ['titulo', 'descripcion', 'foto', 'ciudad', 'ubicacion', 'tags']
     def form_valid(self, form):
         form.instance.autor = self.request.user
         return super().form_valid(form)

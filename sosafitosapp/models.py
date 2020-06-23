@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from django.urls import reverse
 from location_field.models.plain import PlainLocationField
 from PIL import Image
-
+from taggit.managers import TaggableManager
 # Create your models here.
 
 
@@ -16,6 +16,7 @@ class Reporte(models.Model):
     autor = models.ForeignKey(User, on_delete=models.CASCADE)
     ciudad = models.CharField(max_length=255)
     ubicacion = PlainLocationField(based_fields=['ciudad'], zoom=7)
+    tags = TaggableManager()
 
     def __str__(self):
         return self.titulo
@@ -32,11 +33,3 @@ class Reporte(models.Model):
             output_size = (1920,1080)
             img.thumbnail(output_size)
             img.save(self.image.path)
-
-class Tag(models.Model):
-    nombre = models.CharField(max_length=100, unique=True)
-    fecha_creacion = models.DateTimeField(auto_now_add=True)
-    reportes = models.ManyToManyField(Reporte, related_name="tags")
-
-    def __str__(self):
-        return self.nombre

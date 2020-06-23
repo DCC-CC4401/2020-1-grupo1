@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'sosafitosapp',
     'crispy_forms',
     'location_field.apps.DefaultConfig',
+    'taggit',
 ]
 
 MIDDLEWARE = [
