@@ -6,8 +6,8 @@ from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import user_passes_test
-from django.views.generic.edit import CreateView
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic.edit import CreateView, UpdateView
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from .forms import UserRegisterForm, EditProfileForm
 from sosafitosapp.models import Reporte
 
@@ -18,9 +18,8 @@ def user_is_not_logged_in(user):
 
 @login_required
 def home(request):
-
     reportes = Reporte.objects.all()
-    args = {'reportes' : reportes}
+    args = {'reportes': reportes}
     return render(request, "sosafitosapp/home.html", args)
 
 
@@ -47,13 +46,28 @@ def logout_user(request):
     logout(request)
     return HttpResponseRedirect('/login')
 
+
 class ReporteCreateView(LoginRequiredMixin, CreateView):
     model = Reporte
     fields = ['titulo', 'descripcion', 'foto', 'ciudad', 'ubicacion', 'tags']
+
     def form_valid(self, form):
         form.instance.autor = self.request.user
         return super().form_valid(form)
 
+
+class ReporteUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
+    model = Reporte
+    fields = ['titulo', 'descripcion', 'foto', 'ciudad', 'ubicacion', 'tags']
+    success_url = '/my_report'
+
+    def form_valid(self, form):
+        form.instance.autor = self.request.user
+        return super().form_valid(form)
+
+    def test_func(self):
+        report = self.get_object()
+        return self.request.user == report.autor
 
 
 @login_required
@@ -84,7 +98,6 @@ def register(request):
     return render(request, "sosafitosapp/user_register.html", {"form": form})
 
 
-
 @login_required
 def editPassword(request):
     if request.method == 'POST':
@@ -105,14 +118,13 @@ def editPassword(request):
 @login_required
 def view_reporte(request, pk):
     reporte = Reporte.objects.get(id=pk)
-    args = {'reporte' : reporte}
+    args = {'reporte': reporte}
     if request.method == 'GET':
         return render(request, "sosafitosapp/reporte.html", args)
 
 
 @login_required
 def my_report(request):
-
     reportes = Reporte.objects.all()
-    args = {'reportes' : reportes, 'titulo': "Mis reportes"}
+    args = {'reportes': reportes, 'titulo': "Mis reportes"}
     return render(request, "sosafitosapp/myreports.html", args)
