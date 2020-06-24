@@ -18,7 +18,10 @@ def user_is_not_logged_in(user):
 
 @login_required
 def home(request):
-    return render(request, "sosafitosapp/home.html")
+
+    reportes = Reporte.objects.all()
+    args = {'reportes' : reportes}
+    return render(request, "sosafitosapp/home.html", args)
 
 
 @user_passes_test(user_is_not_logged_in, login_url='/')
@@ -97,3 +100,19 @@ def editPassword(request):
     else:
         form = PasswordChangeForm(user=request.user)
         return render(request, "sosafitosapp/edit_password.html", {"form": form})
+
+
+@login_required
+def view_reporte(request, pk):
+    reporte = Reporte.objects.get(id=pk)
+    args = {'reporte' : reporte}
+    if request.method == 'GET':
+        return render(request, "sosafitosapp/reporte.html", args)
+
+
+@login_required
+def my_report(request):
+
+    reportes = Reporte.objects.all()
+    args = {'reportes' : reportes, 'titulo': "Mis reportes"}
+    return render(request, "sosafitosapp/myreports.html", args)
