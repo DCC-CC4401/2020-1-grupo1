@@ -28,7 +28,9 @@ urlpatterns = [
     path('editProfile/', views.editProfile, name='edit'),
     path('logout/', views.logout_user, name='logout'),
     path('registerUser/', views.register, name='registerUser'),
-    path('editPassword/', views.editPassword, name='editPassword')
+    path('editPassword/', views.editPassword, name='editPassword'),
+    path('view_reporte/(?P<pk>\d+)$', views.view_reporte, name='view_reporte'),
+    path('my_report/', views.my_report, name='myreport')
 ]
 
 if settings.DEBUG:
