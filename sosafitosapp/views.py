@@ -47,13 +47,18 @@ def logout_user(request):
     logout(request)
     return HttpResponseRedirect('/login')
 
+
 class ReporteCreateView(LoginRequiredMixin, CreateView):
     model = Reporte
+<<<<<<< HEAD
     fields = ['titulo', 'descripcion', 'foto', 'ciudad', 'ubicacion', 'tags']
+=======
+    fields = ['titulo', 'descripcion', 'foto', 'ciudad', 'ubicacion']
+
+>>>>>>> agregados formato
     def form_valid(self, form):
         form.instance.autor = self.request.user
         return super().form_valid(form)
-
 
 
 @login_required
@@ -82,7 +87,6 @@ def register(request):
     else:
         form = UserRegisterForm()
     return render(request, "sosafitosapp/user_register.html", {"form": form})
-
 
 
 @login_required
