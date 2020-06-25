@@ -14,9 +14,9 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, re_path
 from sosafitosapp import views
-from sosafitosapp.views import ReporteCreateView
+from sosafitosapp.views import ReporteCreateView, ReporteUpdateView
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -29,8 +29,9 @@ urlpatterns = [
     path('logout/', views.logout_user, name='logout'),
     path('registerUser/', views.register, name='registerUser'),
     path('editPassword/', views.editPassword, name='editPassword'),
-    path('view_reporte/(?P<pk>\d+)$', views.view_reporte, name='view_reporte'),
-    path('my_report/', views.my_report, name='myreport')
+    re_path(r'view_reporte/(?P<pk>\d+)/$', views.view_reporte, name='view_reporte'),
+    path('my_report/', views.my_report, name='myreport'),
+    path('reporte/<int:pk>/update/', ReporteUpdateView.as_view(), name='reportEdit')
 ]
 
 if settings.DEBUG:

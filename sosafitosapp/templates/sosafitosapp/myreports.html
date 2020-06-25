@@ -17,7 +17,7 @@
         
                 <!-- Author -->
                 <p class="lead"> 
-                <a href="#">Editar reporte</a>
+                <a href="{% url 'reportEdit' reporte.id %}">Editar reporte</a>
                 </p>
 
                 {% for tag in reporte.tags.all %}
