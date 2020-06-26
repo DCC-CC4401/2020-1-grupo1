@@ -32,4 +32,4 @@ class Reporte(models.Model):
         if img.height>1080 or img.width> 1920:
             output_size = (1920,1080)
             img.thumbnail(output_size)
-            img.save(self.image.path)
+            img.save(self.foto.path)

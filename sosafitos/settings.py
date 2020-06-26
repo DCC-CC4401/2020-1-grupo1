@@ -130,3 +130,8 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 # URLs
 LOGIN_URL = '/login'
+
+LOCATION_FIELD = {
+    'map.provider': 'openstreetmap',
+    'map.zoom':3
+}
