@@ -33,3 +33,8 @@ class Reporte(models.Model):
             output_size = (1920,1080)
             img.thumbnail(output_size)
             img.save(self.foto.path)
+
+class Comentario(models.Model):
+    contenido = models.TextField(max_length=400)
+    autor = models.ForeignKey(User, on_delete=models.CASCADE)
+    reporte_padre = models.ForeignKey(Reporte, on_delete=models.CASCADE)
