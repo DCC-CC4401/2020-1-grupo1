@@ -8,7 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import user_passes_test
 from django.views.generic.edit import CreateView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from .forms import UserRegisterForm, EditProfileForm
+from .forms import UserRegisterForm, EditProfileForm, CommentCreationForm
 from sosafitosapp.models import Reporte
 
 
@@ -118,9 +118,9 @@ def editPassword(request):
 @login_required
 def view_reporte(request, pk):
     reporte = Reporte.objects.get(id=pk)
-    args = {'reporte': reporte}
-    if request.method == 'GET':
-        return render(request, "sosafitosapp/reporte.html", args)
+    form = CommentCreationForm()
+    args = {'reporte': reporte, 'form':form}
+    return render(request, "sosafitosapp/reporte.html", args)
 
 
 @login_required
