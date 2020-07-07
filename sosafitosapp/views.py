@@ -117,14 +117,6 @@ def editPassword(request):
         return render(request, "sosafitosapp/edit_password.html", {"form": form})
 
 
-@login_required
-def view_reporte(request, pk):
-    reporte = Reporte.objects.get(id=pk)
-    args = {'reporte': reporte}
-    if request.method == 'GET':
-        return render(request, "sosafitosapp/reporte.html", args)
-
-
 class MyReporteListView(LoginRequiredMixin, ListView):
     model = Reporte
     template_name = 'sosafitosapp/myreports.html'
