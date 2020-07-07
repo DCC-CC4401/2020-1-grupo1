@@ -16,13 +16,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, re_path
 from sosafitosapp import views
-from sosafitosapp.views import ReporteCreateView, ReporteUpdateView
+from sosafitosapp.views import ReporteCreateView, ReporteUpdateView, ReporteListView, MyReporteListView
 from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.home, name='home'),
+    path('', ReporteListView.as_view(), name='home'),
     path('reporte/new/', ReporteCreateView.as_view(), name='reportCreate'),
     path('login/', views.login_user, name='login'),
     path('editProfile/', views.editProfile, name='edit'),
@@ -30,7 +30,7 @@ urlpatterns = [
     path('registerUser/', views.register, name='registerUser'),
     path('editPassword/', views.editPassword, name='editPassword'),
     re_path(r'view_reporte/(?P<pk>\d+)/$', views.view_reporte, name='view_reporte'),
-    path('my_report/', views.my_report, name='myreport'),
+    path('my_report/', MyReporteListView.as_view(), name='myreport'),
     path('reporte/<int:pk>/update/', ReporteUpdateView.as_view(), name='reportEdit')
 ]
 

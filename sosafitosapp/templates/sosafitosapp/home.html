@@ -2,44 +2,44 @@
 {% block content %}
 
 {% for reporte in reportes %}
-
-<div class="container">
-
-    <div class="row">
-
-        <!-- Post Content Column -->
-        <div class="w3-container">
-
-            <!-- Title -->
-            <h1 class="mt-4">{{reporte.titulo}}</h1>
-
-            {% for tag in reporte.tags.all %}
-
-            <!-- Tags -->
-            <a>#{{ tag }}</a>
-
-            {% endfor %}
-
-            <hr>
-    
-    
-            <!-- Preview Image -->
-            <img class="img-fluid rounded" src="{{reporte.foto.url}}" width="300" height="300" alt="">
-    
-            <hr>
-            
-    
-            <!-- Post Content -->
-            <p class="centrado">{{reporte.descripcion}}</p>
-        
-            <a href="{% url 'view_reporte' pk=reporte.pk %}"> Ver más </a>
-            <hr>
-
+    <div class="container">
+        <div class="row">
+            <div class="w3-container">
+                <h1 class="mt-4">{{ reporte.titulo }}</h1>
+                {% for tag in reporte.tags.all %}
+                <a>#{{ tag }}</a>
+                {% endfor %}
+                <hr>
+                <img class="img-fluid rounded" src="{{ reporte.foto.url }}" width="300" height="300" alt="">
+                <hr>
+                <p class="centrado">{{reporte.descripcion}}</p>
+                <a href="{% url 'view_reporte' pk=reporte.pk %}"> Ver más </a>
+                <hr>
+            </div>
         </div>
     </div>
-
 {% endfor %}
-</div>
 
+<div class="container">
+    {% if is_paginated %}
+        {% if page_obj.has_previous %}
+            <a class="btn btn-outline-info mb-4" href="?page=1">Primera</a>
+            <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.previous_page_number }}">Anterior</a>
+        {% endif %}
+
+        {% for num in page_obj.paginator.page_range %}
+            {% if page_obj.number == num %}
+                <a class="btn btn-info mb-4" href="?page={{ num }}">{{ num }}</a>
+            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                 <a class="btn btn-outline-info mb-4" href="?page={{ num }}">{{ num }}</a>
+            {% endif %}
+        {% endfor %}
+
+        {% if page_obj.has_next %}
+            <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.next_page_number }}">Siguiente</a>
+            <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.paginator.num_pages }}">Última</a>
+        {% endif %}
+    {% endif %}
+</div>
 {% endblock content %}
 
