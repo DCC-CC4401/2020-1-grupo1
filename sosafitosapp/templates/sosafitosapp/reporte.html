@@ -1,9 +1,10 @@
 {% extends "sosafitosapp/base_home.html" %}
+{% load crispy_forms_tags %}
 {% block content %}
 
     <div class="container">
 
-        <div class="row">
+        <div class="row justify-content-center">
     
             <!-- Post Content Column -->
             <div class="col-lg-8">
@@ -42,6 +43,32 @@
             <hr>
 
             </div>
+            
         </div>
+        <div class="row justify-content-center">
+            <div class="col-lg-8" >
+                <form method="POST">
+                    {% csrf_token %}
+                    <fieldset class="form-group">
+                        <legend class="border-bottom mb-4 pt-3 text-center">Comentarios</legend>
+                        {{ form|crispy }}
+                    </fieldset>
+                    <div class="form-group">
+                        <button class="btn btn-primary" type="submit">Subir</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        {% for comentario in comentarios %}
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <hr>
+                <p class="lead">
+                <a href="#">{{comentario.autor}}</a>
+                </p>
+                {{comentario.contenido}}
+            </div>
+        </div>
+        {% endfor%}
     </div>
 {% endblock content %}

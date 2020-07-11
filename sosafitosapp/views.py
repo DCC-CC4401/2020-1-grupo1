@@ -9,8 +9,8 @@ from django.contrib.auth.decorators import user_passes_test
 from django.views.generic import ListView
 from django.views.generic.edit import CreateView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from .forms import UserRegisterForm, EditProfileForm
-from sosafitosapp.models import Reporte
+from .forms import UserRegisterForm, EditProfileForm, CommentCreationForm
+from sosafitosapp.models import Reporte, Comentario
 
 
 def user_is_not_logged_in(user):
@@ -120,9 +120,16 @@ def editPassword(request):
 @login_required
 def view_reporte(request, pk):
     reporte = Reporte.objects.get(id=pk)
-    args = {'reporte': reporte}
-    if request.method == 'GET':
-        return render(request, "sosafitosapp/reporte.html", args)
+    if request.method == 'POST':
+        form = CommentCreationForm(request.POST)
+        if form.is_valid():
+            form.instance.autor = request.user
+            form.instance.reporte_padre = reporte
+            form.save()
+    form = CommentCreationForm()
+    comentarios = Comentario.objects.filter(reporte_padre = reporte)
+    args = {'reporte': reporte, 'form':form, 'comentarios':comentarios}
+    return render(request, "sosafitosapp/reporte.html", args)
 
 
 class MyReporteListView(LoginRequiredMixin, ListView):

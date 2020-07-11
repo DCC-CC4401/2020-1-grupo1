@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
+from .models import Comentario
 
 
 class UserRegisterForm(UserCreationForm):
@@ -36,3 +37,8 @@ class EditProfileForm(forms.ModelForm):
         # This is done here, rather than on the field, because the
         # field does not have access to the initial value
         return self.initial.get('password')
+
+class CommentCreationForm(forms.ModelForm):
+    class Meta:
+        model = Comentario
+        fields = ('contenido',)
