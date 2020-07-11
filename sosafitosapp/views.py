@@ -6,6 +6,7 @@ from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import user_passes_test
+from django.views.generic import ListView
 from django.views.generic.edit import CreateView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from .forms import UserRegisterForm, EditProfileForm
@@ -14,13 +15,6 @@ from sosafitosapp.models import Reporte
 
 def user_is_not_logged_in(user):
     return not user.is_authenticated
-
-
-@login_required
-def home(request):
-    reportes = Reporte.objects.all()
-    args = {'reportes': reportes}
-    return render(request, "sosafitosapp/home.html", args)
 
 
 @user_passes_test(user_is_not_logged_in, login_url='/')
@@ -45,6 +39,14 @@ def login_user(request):
 def logout_user(request):
     logout(request)
     return HttpResponseRedirect('/login')
+
+
+class ReporteListView(ListView):
+    model = Reporte
+    template_name = 'sosafitosapp/home.html'
+    context_object_name = 'reportes'
+    ordering = ['-fecha']
+    paginate_by = 5
 
 
 class ReporteCreateView(LoginRequiredMixin, CreateView):
@@ -123,8 +125,11 @@ def view_reporte(request, pk):
         return render(request, "sosafitosapp/reporte.html", args)
 
 
-@login_required
-def my_report(request):
-    reportes = Reporte.objects.all()
-    args = {'reportes': reportes, 'titulo': "Mis reportes"}
-    return render(request, "sosafitosapp/myreports.html", args)
+class MyReporteListView(LoginRequiredMixin, ListView):
+    model = Reporte
+    template_name = 'sosafitosapp/myreports.html'
+    context_object_name = 'reportes'
+    paginate_by = 3
+
+    def get_queryset(self):
+        return Reporte.objects.filter(autor=self.request.user).order_by('-fecha')
