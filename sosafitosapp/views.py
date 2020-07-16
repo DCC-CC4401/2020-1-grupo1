@@ -17,6 +17,11 @@ def user_is_not_logged_in(user):
     return not user.is_authenticated
 
 
+def home(request):
+    if request.method == 'GET':
+        return render(request, "sosafitosapp/home.html")
+
+
 @user_passes_test(user_is_not_logged_in, login_url='/')
 def login_user(request):
     if request.method == 'GET':
@@ -29,7 +34,7 @@ def login_user(request):
         if user is not None:
             login(request, user)
             messages.success(request, 'Bienvenido ' + username)
-            return redirect("home")
+            return HttpResponseRedirect('/home')
         else:
             messages.warning(request, 'Usuario o contraseña incorrectos')
             return HttpResponseRedirect('/login')
@@ -38,7 +43,7 @@ def login_user(request):
 @login_required
 def logout_user(request):
     logout(request)
-    return HttpResponseRedirect('/login')
+    return HttpResponseRedirect('/home')
 
 
 class ReporteListView(ListView):
@@ -80,7 +85,7 @@ def editProfile(request):
             form.save()
             if form.has_changed():
                 messages.success(request, "Perfil editado exitosamente")
-            return redirect("home")
+            return render(request, "sosafitosapp/home.html")
     else:
         form = EditProfileForm(instance=request.user)
         return render(request, "sosafitosapp/edit_profile.html", {"form": form})
@@ -94,7 +99,7 @@ def register(request):
             form.save()
             username = form.cleaned_data.get("username")
             messages.success(request, f"¡Cuenta creada para {username}!")
-            return redirect("home")
+            return render(request, "sosafitosapp/home.html")
     else:
         form = UserRegisterForm()
     return render(request, "sosafitosapp/user_register.html", {"form": form})
@@ -117,7 +122,7 @@ def editPassword(request):
         return render(request, "sosafitosapp/edit_password.html", {"form": form})
 
 
-@login_required
+
 def view_reporte(request, pk):
     reporte = Reporte.objects.get(id=pk)
     if request.method == 'POST':
