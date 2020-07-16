@@ -123,7 +123,6 @@ def editPassword(request):
         return render(request, "sosafitosapp/edit_password.html", {"form": form})
 
 
-@login_required
 def view_reporte(request, pk):
     reporte = Reporte.objects.get(id=pk)
     if request.method == 'POST':
