@@ -85,7 +85,7 @@ def editProfile(request):
             form.save()
             if form.has_changed():
                 messages.success(request, "Perfil editado exitosamente")
-            return render(request, "sosafitosapp/home.html")
+            return HttpResponseRedirect('/home')
     else:
         form = EditProfileForm(instance=request.user)
         return render(request, "sosafitosapp/edit_profile.html", {"form": form})
@@ -99,7 +99,8 @@ def register(request):
             form.save()
             username = form.cleaned_data.get("username")
             messages.success(request, f"¡Cuenta creada para {username}!")
-            return render(request, "sosafitosapp/home.html")
+            return HttpResponseRedirect('/home')
+        
     else:
         form = UserRegisterForm()
     return render(request, "sosafitosapp/user_register.html", {"form": form})
