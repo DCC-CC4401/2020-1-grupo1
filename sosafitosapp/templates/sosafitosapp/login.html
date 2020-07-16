@@ -2,6 +2,55 @@
 
 {% block content %}
 <div class="col-4 text-center">
+    <nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="{%url 'home' %}">Sosafitos</a>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <h3 class="my-0 mr-md-auto font-weight-normal"></h3>
+            <h3 class="my-0 mr-md-auto font-weight-normal">{{titulo}}</h3>
+
+            <div class="col-2 text-center">
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+                <nav class="my-2 my-md-0 mr-md-3">
+                    {% if user.is_authenticated %}
+                    <div class="dropdown">
+                        <button class="btn btn-outline-primary">Mi cuenta</button>
+                        <div class="dropdown-content">
+                          <a  href="{% url 'edit' %}">Editar Perfil</a>
+                          <a  href="{% url 'logout' %}">Cerrar sesion</a>
+
+                        </div>
+                    </div>
+                      <a class="p-2 text-dark" href="{%url 'home' %}">Inicio</a>
+                      <a class="p-2 text-dark" href="{%url 'reportCreate' %}">Subir reporte</a>
+                      <a class="p-2 text-dark" href="{% url 'myreport' %}">Mis reportes</a>
+                    {% endif %}
+
+                    {% if not user.is_authenticated %}
+
+                    <a class="p-2 text-dark" href="{%url 'home' %}">Inicio</a>
+                    <a class="btn btn-outline-primary" href="{% url 'login' %}" class="btn btn-primary">Iniciar Sesión</a>
+                    <a class="btn btn-outline-primary" href="{% url 'registerUser' %}" class="btn btn-primary">Regístrarse</a>
+                    {% endif %}
+                </nav>
+
+        </div>
+      </nav>
+    <nav>
+      <label></label>
+    </nav>
+    <nav>
+        <label></label>
+    </nav>
+    <nav>
+        <label></label>
+    </nav>
+
     <form method="post" class="container">
         {% csrf_token %}
         <div class="shadow-none p-3 mb-5 bg-light rounded">
@@ -18,7 +67,8 @@
                 <a href="{% url 'registerUser' %}" class="btn btn-primary">Regístrarse</a>
             </div>
             <div>
-                <a href="#" class="text-decoration-none">Olvidé la contraseña</a>
+
+                <a href="{% url 'home' %}" class="text-decoration-none">Inicio</a>
             </div>
         </div>
     </form>

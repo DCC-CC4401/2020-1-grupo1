@@ -1,4 +1,4 @@
-{% extends "sosafitosapp/base_home.html" %}
+{% extends "sosafitosapp/home.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
 
@@ -45,6 +45,7 @@
             </div>
             
         </div>
+        {% if user.is_authenticated %}
         <div class="row justify-content-center">
             <div class="col-lg-8" >
                 <form method="POST">
@@ -59,6 +60,8 @@
                 </form>
             </div>
         </div>
+        {% endif %}
+        
         {% for comentario in comentarios %}
         <div class="row justify-content-center">
             <div class="col-lg-8">

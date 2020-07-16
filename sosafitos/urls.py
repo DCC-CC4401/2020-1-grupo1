@@ -24,6 +24,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', ReporteListView.as_view(), name='home'),
     path('reporte/new/', ReporteCreateView.as_view(), name='reportCreate'),
+    path('home/', ReporteListView.as_view(), name = 'home-'),
     path('login/', views.login_user, name='login'),
     path('editProfile/', views.editProfile, name='edit'),
     path('logout/', views.logout_user, name='logout'),
