@@ -1,24 +1,51 @@
 {% extends "sosafitosapp/base_home.html" %}
+
+
+{% load crispy_forms_tags %}
 {% block content %}
 
-{% for reporte in reportes %}
-    <div class="container">
-        <div class="row">
-            <div class="w3-container">
-                <h1 class="mt-4">{{ reporte.titulo }}</h1>
-                {% for tag in reporte.tags.all %}
-                <a>#{{ tag }}</a>
-                {% endfor %}
-                <hr>
-                <img class="img-fluid rounded" src="{{ reporte.foto.url }}" width="300" height="300" alt="">
-                <hr>
-                <p class="centrado">{{reporte.descripcion}}</p>
-                <a href="{% url 'view_reporte' pk=reporte.pk %}"> Ver más </a>
-                <hr>
+<div class="row">
+    <div class="col-3"></div>
+    <div class="col-5">
+        {% for reporte in reportes %}
+            <div class="container">
+                <div class="row">
+                    <div class="w3-container">
+                        <h1 class="mt-4">{{ reporte.titulo }}</h1>
+                        {% for tag in reporte.tags.all %}
+                        <a>#{{ tag }}</a>
+                        {% endfor %}
+                        <hr>
+                        <img class="img-fluid rounded" src="{{ reporte.foto.url }}" width="300" height="300" alt="">
+                        <hr>
+                        <p class="centrado">{{reporte.descripcion}}</p>
+                        <a href="{% url 'view_reporte' pk=reporte.pk %}"> Ver más </a>
+                        <hr>
+                    </div>
+                </div>
             </div>
+        {% endfor %}
+    </div>
+    <div class="col-sm-">
+        <div class="container">
+            <form method="post" novalidate>
+                {% csrf_token %}
+                <fieldset class="form-group">
+                    <legend class="border-bottom mb-4 pt-3 text-center">Filtar por:</legend>
+                    <style>
+                        .asteriskField {
+                            display: none;
+                        }
+                    </style>
+                    {{ form | crispy }}
+                </fieldset>
+                <div class="form-group">
+                    <button class="btn btn-primary" type="submit">Filtrar</button>
+                </div>
+            </form>
         </div>
     </div>
-{% endfor %}
+</div>
 
 <div class="container">
     {% if is_paginated %}

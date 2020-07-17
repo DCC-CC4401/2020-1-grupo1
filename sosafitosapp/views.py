@@ -9,7 +9,7 @@ from django.contrib.auth.decorators import user_passes_test
 from django.views.generic import ListView
 from django.views.generic.edit import CreateView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from .forms import UserRegisterForm, EditProfileForm, CommentCreationForm
+from .forms import UserRegisterForm, EditProfileForm, CommentCreationForm, FilterForm
 from sosafitosapp.models import Reporte, Comentario
 
 
@@ -48,6 +48,27 @@ class ReporteListView(ListView):
     ordering = ['-fecha']
     paginate_by = 5
 
+def reporteHomeView(request):
+    context = {}
+    if request.method == 'POST':
+        form = FilterForm(request.POST)
+        if form.is_valid():
+            if form.cleaned_data["filter_type"] == "1":
+                context = {
+                "reportes" : Reporte.objects.all().order_by("-fecha").filter(ciudad = form.cleaned_data["filter_content"]),
+                "form" : FilterForm
+                }
+            elif form.cleaned_data["filter_type"] == "2":
+                context = {
+                    "reportes" : Reporte.objects.all().order_by("-fecha").filter(tags__name = form.cleaned_data["filter_content"]),
+                    "form" : FilterForm
+                }
+    else:
+        context = {
+            "reportes" : Reporte.objects.all().order_by("-fecha"),
+            "form" : FilterForm
+        }
+    return render(request, "sosafitosapp/home.html", context)
 
 class ReporteCreateView(LoginRequiredMixin, CreateView):
     model = Reporte

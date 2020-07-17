@@ -42,3 +42,12 @@ class CommentCreationForm(forms.ModelForm):
     class Meta:
         model = Comentario
         fields = ('contenido',)
+
+class FilterForm(forms.Form):
+    filter_type = forms.ChoiceField(choices=[("1", "ciudad"), ("2", "tags")])
+    filter_content = forms.CharField(max_length=20, label="filter_content")
+
+    def __init__(self, *args, **kwargs):
+        super(FilterForm, self).__init__(*args, **kwargs)
+        self.fields['filter_type'].label = 'Elegir filtro:'
+        self.fields['filter_content'].label = ''
