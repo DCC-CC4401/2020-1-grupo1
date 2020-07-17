@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, re_path
 from sosafitosapp import views
-from sosafitosapp.views import ReporteCreateView, ReporteUpdateView, ReporteListView, MyReporteListView
+from sosafitosapp.views import ReporteCreateView, ReporteUpdateView, MyReporteListView
 from django.conf import settings
 from django.conf.urls.static import static
 

@@ -1,3 +1,4 @@
+from django.core.paginator import Paginator
 from django.contrib import messages
 from django.contrib.auth import logout, authenticate, login
 from django.http import HttpResponseRedirect
@@ -9,6 +10,7 @@ from django.contrib.auth.decorators import user_passes_test
 from django.views.generic import ListView
 from django.views.generic.edit import CreateView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from taggit.models import Tag
 from .forms import UserRegisterForm, EditProfileForm, CommentCreationForm, FilterForm
 from sosafitosapp.models import Reporte, Comentario
 
@@ -41,34 +43,31 @@ def logout_user(request):
     return HttpResponseRedirect('/login')
 
 
-class ReporteListView(ListView):
-    model = Reporte
-    template_name = 'sosafitosapp/home.html'
-    context_object_name = 'reportes'
-    ordering = ['-fecha']
-    paginate_by = 5
-
 def reporteHomeView(request):
-    context = {}
+    reportes = Reporte.objects.all().order_by("-fecha")
+    page_number = request.GET.get('page')
+    paginator = Paginator(reportes, 5)
     if request.method == 'POST':
         form = FilterForm(request.POST)
         if form.is_valid():
+            page_number = 1
             if form.cleaned_data["filter_type"] == "1":
-                context = {
-                "reportes" : Reporte.objects.all().order_by("-fecha").filter(ciudad = form.cleaned_data["filter_content"]),
-                "form" : FilterForm
-                }
+                reportes = Reporte.objects.all().order_by("-fecha").filter(
+                        ciudad=form.cleaned_data["filter_content"])
+
             elif form.cleaned_data["filter_type"] == "2":
-                context = {
-                    "reportes" : Reporte.objects.all().order_by("-fecha").filter(tags__name = form.cleaned_data["filter_content"]),
-                    "form" : FilterForm
-                }
-    else:
-        context = {
-            "reportes" : Reporte.objects.all().order_by("-fecha"),
-            "form" : FilterForm
-        }
+                reportes = Reporte.objects.all().order_by("-fecha").filter(
+                        tags__name=form.cleaned_data["filter_content"])
+
+            paginator = Paginator(reportes, len(reportes))
+    page_obj = paginator.get_page(page_number)
+    context = {
+        "reportes": reportes,
+        "form": FilterForm,
+        'page_obj': page_obj
+    }
     return render(request, "sosafitosapp/home.html", context)
+
 
 class ReporteCreateView(LoginRequiredMixin, CreateView):
     model = Reporte
@@ -148,8 +147,8 @@ def view_reporte(request, pk):
             form.instance.reporte_padre = reporte
             form.save()
     form = CommentCreationForm()
-    comentarios = Comentario.objects.filter(reporte_padre = reporte)
-    args = {'reporte': reporte, 'form':form, 'comentarios':comentarios}
+    comentarios = Comentario.objects.filter(reporte_padre=reporte)
+    args = {'reporte': reporte, 'form': form, 'comentarios': comentarios}
     return render(request, "sosafitosapp/reporte.html", args)
 
 

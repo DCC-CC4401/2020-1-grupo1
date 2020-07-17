@@ -1,13 +1,11 @@
 {% extends "sosafitosapp/base_home.html" %}
-
-
 {% load crispy_forms_tags %}
 {% block content %}
 
 <div class="row">
     <div class="col-3"></div>
     <div class="col-5">
-        {% for reporte in reportes %}
+        {% for reporte in page_obj %}
             <div class="container">
                 <div class="row">
                     <div class="w3-container">
@@ -48,7 +46,7 @@
 </div>
 
 <div class="container">
-    {% if is_paginated %}
+    <ul class="pagination">
         {% if page_obj.has_previous %}
             <a class="btn btn-outline-info mb-4" href="?page=1">Primera</a>
             <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.previous_page_number }}">Anterior</a>
@@ -66,7 +64,7 @@
             <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.next_page_number }}">Siguiente</a>
             <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.paginator.num_pages }}">Última</a>
         {% endif %}
-    {% endif %}
+    </ul>
 </div>
 {% endblock content %}
 

@@ -38,10 +38,12 @@ class EditProfileForm(forms.ModelForm):
         # field does not have access to the initial value
         return self.initial.get('password')
 
+
 class CommentCreationForm(forms.ModelForm):
     class Meta:
         model = Comentario
         fields = ('contenido',)
+
 
 class FilterForm(forms.Form):
     filter_type = forms.ChoiceField(choices=[("1", "ciudad"), ("2", "tags")])
