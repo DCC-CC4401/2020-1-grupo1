@@ -43,23 +43,25 @@ def logout_user(request):
     return HttpResponseRedirect('/login')
 
 
-def reporteHomeView(request):
+def reporteHomeView(request, state=0):
     reportes = Reporte.objects.all().order_by("-fecha")
     page_number = request.GET.get('page')
-    paginator = Paginator(reportes, 5)
     if request.method == 'POST':
         form = FilterForm(request.POST)
         if form.is_valid():
             page_number = 1
-            if form.cleaned_data["filter_type"] == "1":
-                reportes = Reporte.objects.all().order_by("-fecha").filter(
-                        ciudad=form.cleaned_data["filter_content"])
+            request.session['type'] = form.cleaned_data["filter_type"]
+            request.session['filter_data'] = form.cleaned_data["filter_content"]
 
-            elif form.cleaned_data["filter_type"] == "2":
-                reportes = Reporte.objects.all().order_by("-fecha").filter(
-                        tags__name=form.cleaned_data["filter_content"])
+    if state == 0:
+        request.session['type'] = 0
 
-            paginator = Paginator(reportes, len(reportes))
+    if request.session['type'] == "1":
+        reportes = Reporte.objects.all().order_by("-fecha").filter(ciudad=request.session['filter_data'])
+    elif request.session['type'] == "2":
+        reportes = Reporte.objects.all().order_by("-fecha").filter(tags__name=request.session['filter_data'])
+
+    paginator = Paginator(reportes, 5)
     page_obj = paginator.get_page(page_number)
     context = {
         "reportes": reportes,
