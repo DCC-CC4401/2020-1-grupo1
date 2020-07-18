@@ -46,15 +46,15 @@ def logout_user(request):
 def reporteHomeView(request, state=0):
     reportes = Reporte.objects.all().order_by("-fecha")
     page_number = request.GET.get('page')
+    if state == 0:
+        request.session['type'] = 0
+
     if request.method == 'POST':
         form = FilterForm(request.POST)
         if form.is_valid():
             page_number = 1
             request.session['type'] = form.cleaned_data["filter_type"]
             request.session['filter_data'] = form.cleaned_data["filter_content"]
-
-    if state == 0:
-        request.session['type'] = 0
 
     if request.session['type'] == "1":
         reportes = Reporte.objects.all().order_by("-fecha").filter(ciudad=request.session['filter_data'])
