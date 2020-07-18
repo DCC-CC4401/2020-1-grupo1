@@ -5,6 +5,8 @@ from django.urls import reverse
 from location_field.models.plain import PlainLocationField
 from PIL import Image
 from taggit.managers import TaggableManager
+
+
 # Create your models here.
 
 
@@ -23,16 +25,17 @@ class Reporte(models.Model):
 
     def get_absolute_url(self):
         return reverse('home')
-    
+
     def save(self):
         super().save()
 
         img = Image.open(self.foto.path)
 
-        if img.height>1080 or img.width> 1920:
-            output_size = (1920,1080)
+        if img.height > 1080 or img.width > 1920:
+            output_size = (1920, 1080)
             img.thumbnail(output_size)
             img.save(self.foto.path)
+
 
 class Comentario(models.Model):
     contenido = models.TextField(max_length=400)

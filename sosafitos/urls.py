@@ -16,13 +16,14 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, re_path
 from sosafitosapp import views
-from sosafitosapp.views import ReporteCreateView, ReporteUpdateView, ReporteListView, MyReporteListView
+from sosafitosapp.views import ReporteCreateView, ReporteUpdateView, MyReporteListView
 from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.reporteHomeView, name='home'),
+    path('filter=<int:state>/', views.reporteHomeView, name='home'),
     path('reporte/new/', ReporteCreateView.as_view(), name='reportCreate'),
     path('home/', ReporteListView.as_view(), name = 'home-'),
     path('login/', views.login_user, name='login'),
