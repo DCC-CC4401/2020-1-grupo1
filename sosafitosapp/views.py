@@ -58,7 +58,12 @@ def reporteHomeView(request):
     if request.method == 'POST':
         form = FilterForm(request.POST)
         if form.is_valid():
-            if form.cleaned_data["filter_type"] == "1":
+            if form.cleaned_data["filter_content"].split()==[]:
+                context = {
+                    "reportes" : Reporte.objects.all().order_by("-fecha"),
+                    "form" : FilterForm
+                }
+            elif form.cleaned_data["filter_type"] == "1":
                 context = {
                 "reportes" : Reporte.objects.all().order_by("-fecha").filter(ciudad = form.cleaned_data["filter_content"]),
                 "form" : FilterForm
