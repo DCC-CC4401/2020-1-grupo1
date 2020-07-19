@@ -36,7 +36,7 @@ def login_user(request):
         if user is not None:
             login(request, user)
             messages.success(request, 'Bienvenido ' + username)
-            return HttpResponseRedirect('/home')
+            return HttpResponseRedirect('/')
         else:
             messages.warning(request, 'Usuario o contraseña incorrectos')
             return HttpResponseRedirect('/login')
@@ -45,7 +45,7 @@ def login_user(request):
 @login_required
 def logout_user(request):
     logout(request)
-    return HttpResponseRedirect('/home')
+    return HttpResponseRedirect('/')
 
 
 def reporteHomeView(request, state=0):
