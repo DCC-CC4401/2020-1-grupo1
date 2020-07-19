@@ -53,7 +53,7 @@
           </div>
 
           <nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light">
-            <a class="navbar-brand" href="{%url 'home-' %}">Sosafitos</a>
+            <a class="navbar-brand" href="{% url 'home' %}">Sosafitos</a>
 
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <h3 class="my-0 mr-md-auto font-weight-normal"></h3>
@@ -76,14 +76,14 @@
 
                             </div>
                         </div>
-                          <a class="p-2 text-dark" href="{%url 'home-' %}">Inicio</a>
+                          <a class="p-2 text-dark" href="{%url 'home' %}">Inicio</a>
                           <a class="p-2 text-dark" href="{%url 'reportCreate' %}">Subir reporte</a>
                           <a class="p-2 text-dark" href="{% url 'myreport' %}">Mis reportes</a>
                         {% endif %}
 
                         {% if not user.is_authenticated %}
 
-                        <a class="p-2 text-dark" href="{%url 'home-' %}">Inicio</a>
+                        <a class="p-2 text-dark" href="{%url 'home' %}">Inicio</a>
                         <a class="btn btn-outline-primary" href="{% url 'login' %}" class="btn btn-primary">Iniciar Sesión</a>
                         <a class="btn btn-outline-primary" href="{% url 'registerUser' %}" class="btn btn-primary">Regístrarse</a>
                         {% endif %}
